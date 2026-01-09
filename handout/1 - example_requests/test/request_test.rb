@@ -17,4 +17,24 @@ class RequestTest < Minitest::Test
     assert_equal '/', request.resource
   end
 
+  def test_parses_version_from_simple_get
+    request_string = File.read('../get-index.request.txt')
+    request = Request.new(request_string)
+
+    assert_equal 'HTTP/1.1', request.version
+  end
+
+  def test_parses_headers_from_simple_get
+    request_string = File.read('./getindex.request.txt')
+    request = Request.new(request_string)
+
+    assert_equal "{'Host' => 'developer.mozilla.org', 'Accept-Language' => 'fr'}", request.headers
+
+  end
+
+
+
+
+  
+
 end
