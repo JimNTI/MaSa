@@ -1,14 +1,26 @@
 class Router
   def initialize
-    @routes = {}
+    @get_routes = {}
+    @post_routes = {}
   end
+
+    def post(path, &blk)
+      @post_routes[path] = blk
+    end
 
   def get(path, &blk)
-    @routes[path] = blk
+    @get_routes[path] = blk
   end
 
-  def find(path)
-    @routes[path]
+
+
+  def find(path, method)
+    case method
+    when "GET"
+      @get_routes[path]
+    when "POST"
+      @post_routes[path]
+    end
   end
 
 
