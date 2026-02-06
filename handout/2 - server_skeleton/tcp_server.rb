@@ -1,9 +1,14 @@
 require 'socket'
+require_relative 'lib/request'
+require_relative 'lib/router'
+
+
 
 class HTTPServer
 
-  def initialize(port)
+  def initialize(port, router)
     @port = port
+    @router = router
   end
 
   def start
@@ -20,9 +25,14 @@ class HTTPServer
       puts data
       puts '-' * 40
 
-      #request = Request.new(data)
+      request = Request.new(data)
 
-      html = "<h1>Hello, World!</h1>"
+      p request
+
+      #html = "<h1>Hello, World!</h1>"
+
+      route = @router.find(request.resource)
+      html
 
       session.print "HTTP/1.1 200\r\n"
       session.print "Content-Type: text/html\r\n"

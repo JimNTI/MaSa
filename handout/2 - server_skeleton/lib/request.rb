@@ -3,6 +3,7 @@ class Request
   def initialize(request_string)
     @request_string = request_string
     @params = {}
+
     parse_request_line
     parse_headers
     parse_params
