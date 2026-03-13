@@ -15,6 +15,14 @@ class Request
   def parse_request_line
     lines = @request_string.split(/\r?\n/)
     request_line = lines.first
+
+    if request_line.nil? || request_line.strip.empty?
+      @method = "GET"
+      @resource = "/"
+      @version = "HTTP/1.1"
+      return
+    end
+
     @method, @resource, @version = request_line.split(" ")
   end
 

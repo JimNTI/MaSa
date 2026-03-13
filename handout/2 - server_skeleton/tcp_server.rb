@@ -61,6 +61,13 @@ class HTTPServer
       else
         file_path = File.join("public", request.resource.sub(/^\//,""))
 
+          unless File.exist?(file_path)
+            html_path = file_path + ".html"
+            if File.exist?(html_path)
+              file_path = html_path
+            end
+          end
+
           if File.exist?(file_path) && !File.directory?(file_path)
             ext = File.extname(file_path)
             content_type = case ext
@@ -100,6 +107,10 @@ end
 
 router.get("/secret") do |request|
   "<h1>Secret info: #{request.params}</h1>"
+end
+
+router.get("/add/:num1/with/:num2") do |request|
+  "<h1>Secret info: #{request.params[:num1] }</h1>"
 end
 
 router.post("/posting") do |request|
