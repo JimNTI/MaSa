@@ -51,8 +51,8 @@ class Request
         @resource = path
         query_string.split("&").each do |pair| #key-value pair
           key, value = pair.split("=", 2)
-          key = CGI.unescape(key)
-          value = CGI.unescape(value || "")
+        #  key = CGI.unescape(key)
+        #  value = CGI.unescape(value || "")
           @params[key] = value
         end
     end
@@ -63,8 +63,8 @@ class Request
       body = @request_string.split(/\r?\n\r?\n/, 2)[1]
       body.split("&").each do |pair|
         key, value = pair.split("=", 2)
-        key = CGI.unescape(key)
-        value = CGI.unescape(value || "")
+       # key = CGI.unescape(key)
+       # value = CGI.unescape(value || "")
         @params[key] = value.strip
       end
     else return

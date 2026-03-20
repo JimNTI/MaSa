@@ -20,11 +20,13 @@ class Router
       else 
         routes = @post_routes
       end
-  
       path_parts = path.split("/")
 
       routes.each do |route|
         route_parts = route[:path].split("/")
+
+      if route_parts.length == path_parts.length
+
 
         params = {}
         matching = true
@@ -33,18 +35,20 @@ class Router
 
           if part.start_with?(":")
             key = part[1..]
-            params[key] = path.parts[i]
-          elsif i != path_parts[i]
+            params[key] = path_parts[i]
+          elsif part != path_parts[i]
             matching = false
             break
           end
         end
-
         if matching
-          return [routes[:block], params]
+          return {block: route[:block], params: params}
         end
       end
     end
+
+    return nil
+  end
 
 
 
