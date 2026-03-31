@@ -5,7 +5,10 @@ class Router
   end
 
     def post(path, &blk)
-      @post_routes << {path: path, block: blk}
+      @post_routes << {path: path, block: blk, parts: path.split("/")}
+      #"/users/:id"
+      #{path: [{part: "users", dynamic: false}, {part: "id", dynamic: true}]}
+
     end
 
   def get(path, &blk)
@@ -23,11 +26,9 @@ class Router
       path_parts = path.split("/")
 
       routes.each do |route|
-        route_parts = route[:path].split("/")
+        route_parts = #route[:parts] #path.split("/")
 
       if route_parts.length == path_parts.length
-
-
         params = {}
         matching = true
         

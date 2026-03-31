@@ -1,6 +1,6 @@
 require 'socket'
 require_relative 'lib/request'
-require_relative 'lib/router_test.rb'
+require_relative 'lib/router.rb'
 require 'cgi'
 
 class HTTPServer
@@ -39,15 +39,19 @@ class HTTPServer
       puts "RECEIVED REQUEST"
       puts '-' * 40
       puts data
+
       puts '-' * 40
 
       request = Request.new(data)
       p request
 
+
       route = @router.find(request.resource, request.method)
 
       if route
-      result = route[:block].call(request)
+        request.params
+        result = (route[:block]).call(request)
+      p request.params
 
         if result.is_a?(Hash)
           content_type = result[:content_type]
@@ -107,15 +111,18 @@ end
 
 router.get("/secret") do |request|
   "<h1>Secret info: #{request.params}</h1>"
-    "<h2>Secret info: #{request.params}</h2>"
 end
 
 router.get("/add/:num1/with/:num2") do |request|
-  "<h1>Secret info: #{request.params}</h1>"
+  num1 = request.params["num1"].to_i
+  num2 = request.params["num2"].to_i
+  
+  "<h1>Answer: #{num1} + #{num2} = #{num1 + num2}</h1><h1>#{num1}</h1>"
+
 end
 
 router.post("/posting") do |request|
-  "<h1>Posted data: #{request.params}</h1>"
+  "<h1> #{request.params}</h1>"
 end
 
 

@@ -1,8 +1,10 @@
+require 'cgi'
 class Request
   attr_reader :method, :resource, :version, :headers, :params
   def initialize(request_string)
     @request_string = request_string
     @params = {}
+
     parse_request_line
     parse_headers
     parse_params
@@ -13,6 +15,14 @@ class Request
   def parse_request_line
     lines = @request_string.split(/\r?\n/)
     request_line = lines.first
+
+    if request_line.nil? || request_line.strip.empty?
+      @method = "GET"
+      @resource = "/"
+      @version = "HTTP/1.1"
+      return
+    end
+
     @method, @resource, @version = request_line.split(" ")
   end
 
@@ -23,7 +33,7 @@ class Request
     header_lines.each do |line|
       if line.strip.empty?
         break
-        else
+      else
           key, value = line.split(": ", 2)
           @headers[key] = value
       end
@@ -41,6 +51,8 @@ class Request
         @resource = path
         query_string.split("&").each do |pair| #key-value pair
           key, value = pair.split("=", 2)
+        #  key = CGI.unescape(key)
+        #  value = CGI.unescape(value || "")
           @params[key] = value
         end
     end
@@ -51,6 +63,8 @@ class Request
       body = @request_string.split(/\r?\n\r?\n/, 2)[1]
       body.split("&").each do |pair|
         key, value = pair.split("=", 2)
+       # key = CGI.unescape(key)
+       # value = CGI.unescape(value || "")
         @params[key] = value.strip
       end
     else return
