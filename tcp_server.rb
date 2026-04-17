@@ -44,6 +44,7 @@ class HTTPServer
 
       request = Request.new(data)
       #p request
+      
       p request.method
       p request.resource 
       p request.version
@@ -56,7 +57,8 @@ class HTTPServer
       if route
         request.params = route[:params]
         result = route[:block].call(request)
-      p request.params
+        params = request.params
+      p params
         if result.is_a?(Hash)
           content_type = route[:content_type]
           body = result[:body]

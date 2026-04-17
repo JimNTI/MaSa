@@ -17,15 +17,15 @@ router.get("/secret/:secretmessage") do |request|
 end
 
 router.get("/add/:num1/with/:num2") do |request|
-  num1 = request.params[:num1].to_i
-  num2 = request.params[:num2].to_i
+  num1 = params[:num1].to_i
+  num2 = params[:num2].to_i
   
   "<h1>Answer: #{num1} + #{num2} = #{num1 + num2}</h1><h1>#{num1}</h1>"
 
 end
 
 router.post("/posting") do |request|
-  "<h1> #{request.params}</h1>"
+  "<h1> #{params}</h1>"
 end
 
 
