@@ -54,10 +54,13 @@ class HTTPServer
 
       route = @router.find(request.resource, request.method)
 
+
+
       if route
         request.params = route[:params]
         result = route[:block].call(request)
         params = request.params
+
       p params
         if result.is_a?(Hash)
           content_type = route[:content_type]
