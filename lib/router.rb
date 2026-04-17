@@ -12,7 +12,7 @@ class Router
     end
 
   def get(path, &blk)
-      @post_routes << {path: path, block: blk, parts: path.split("/")}
+      @get_routes << {path: path, block: blk, parts: path.split("/")}
   end
 
 
@@ -36,7 +36,7 @@ class Router
 
           if part.start_with?(":")
             key = part[1..]
-            params[key] = path_parts[i]
+            params[key.to_sym] = path_parts[i]
           elsif part != path_parts[i]
             matching = false
             break

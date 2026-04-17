@@ -43,18 +43,22 @@ class HTTPServer
       puts '-' * 40
 
       request = Request.new(data)
-      p request
-
-
-      result = @router.find(request.resource, request.method)
-
-      if result
-        request.params = result[:params]
-        result = result[:block].call(request)
+      #p request
+      p request.method
+      p request.resource 
+      p request.version
+      #p request.header
       p request.params
 
+
+      route = @router.find(request.resource, request.method)
+
+      if route
+        request.params = route[:params]
+        result = route[:block].call(request)
+      p request.params
         if result.is_a?(Hash)
-          content_type = result[:content_type]
+          content_type = route[:content_type]
           body = result[:body]
         else
           content_type = "text/html; charset=utf-8"
@@ -109,8 +113,10 @@ router.get("/home") do |request|
   "<h1>Welcome to the Front Page</h1>"
 end
 
-router.get("/secret") do |request|
-  "<h1>Secret info: #{request.params}</h1>"
+router.get("/secret/:secretmessage") do |request|
+  secretmessage = request.params["secretmessage"].to_s
+
+  "<h1>Secret info: #{secretmessage}</h1>"
 end
 
 router.get("/add/:num1/with/:num2") do |request|
