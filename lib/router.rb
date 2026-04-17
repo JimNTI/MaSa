@@ -12,7 +12,7 @@ class Router
     end
 
   def get(path, &blk)
-    @get_routes << {path: path, block: blk}
+      @post_routes << {path: path, block: blk, parts: path.split("/")}
   end
 
 
@@ -26,7 +26,7 @@ class Router
       path_parts = path.split("/")
 
       routes.each do |route|
-        route_parts = #route[:parts] #path.split("/")
+        route_parts = route[:parts] #path.split("/")
 
       if route_parts.length == path_parts.length
         params = {}

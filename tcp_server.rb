@@ -46,11 +46,11 @@ class HTTPServer
       p request
 
 
-      route = @router.find(request.resource, request.method)
+      result = @router.find(request.resource, request.method)
 
-      if route
-        request.params
-        result = (route[:block]).call(request)
+      if result
+        request.params = result[:params]
+        result = result[:block].call(request)
       p request.params
 
         if result.is_a?(Hash)
