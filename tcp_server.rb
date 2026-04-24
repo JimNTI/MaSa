@@ -3,6 +3,18 @@ require_relative 'lib/request'
 require_relative 'lib/router.rb'
 require 'cgi'
 
+class App
+  attr_reader :params, :response
+
+  def initialize(params)
+    @params = params
+  end
+
+  def redirect(path)
+    @response = {redirect: path}
+  end
+end
+
 class HTTPServer
   def initialize(port, router)
     @port = port
@@ -57,11 +69,19 @@ class HTTPServer
 
 
       if route
-        request.params = route[:params]
-        result = route[:block].call(request)
-        params = request.params
+        merge_params = request.params.merge(route[:params])
+        context = App.new(merge_params)
+        result = context.instance_eval(&route[:block])
 
-      p params
+        p context
+
+        if context.response && context.response[:redirect]
+          session.print "HTTP/1.1 302 Found\r\n"
+          session.print "Location: #{context.response[:redirect]}\r\n"
+          session.print "\r\n"
+          session.close
+          next
+        end
         if result.is_a?(Hash)
           content_type = route[:content_type]
           body = result[:body]

@@ -1,6 +1,6 @@
 require 'cgi'
 class Request
-  attr_accessor :method, :resource, :version, :headers, :params
+  attr_reader :method, :resource, :version, :headers, :params
   def initialize(request_string)
     @request_string = request_string
     @params = {}
